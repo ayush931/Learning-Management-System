@@ -41,7 +41,7 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      emun: ["ADMIN", "USER"],
+      enum: ["ADMIN", "USER"],
       default: "USER",
     },
     forgotPasswordToken: String,
@@ -68,19 +68,17 @@ userSchema.methods = {
   generateJwtToken: async function () {
     //@ts-ignore
     return await jwt.sign(
-      {
-        id: this._id,
-        name: this.name,
-        email: this.email,
-        role: this.role,
-        subscription: this.subscription,
-      },
+      { id: this._id, email: this.email, role: this.role },
       process.env.JWT_SECRET as string,
-      { expiresIn: process.env.JWT_EXPIRY || "7d" }
+      {
+        expiresIn: process.env.JWT_EXPIRY || "24h",
+      }
     );
   },
-  hashPassword: async function (plainTextPassword: string) {
-    return await bcrypt.hash(plainTextPassword, this.password);
+
+  // comparing the user existing and given password
+  comparePassword: async function (plainTextPassword: string) {
+    return await bcrypt.compare(plainTextPassword, this.password);
   },
 };
 

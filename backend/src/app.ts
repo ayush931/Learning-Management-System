@@ -4,6 +4,7 @@ import cors from "cors";
 import { config } from "dotenv";
 import morgan from "morgan";
 import userRouter from "./routes/user.route";
+import errorMiddleware from "./middlewares/error.middleware";
 config();
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 // show the api call in the terminal
 app.use(morgan("dev"));
 
+// connetion between the frontend and the backend for the resource sharing
 app.use(
   cors({
     origin: process.env.FRONTEND_URI,
