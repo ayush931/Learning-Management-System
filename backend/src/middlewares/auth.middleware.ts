@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
-import AppError from "../utils/error.util";
-import jwt from "jsonwebtoken";
+import { NextFunction, Request, Response } from 'express';
+import AppError from '../utils/error.util';
+import jwt from 'jsonwebtoken';
 
 // Extend Express Request interface to include 'user'
 declare global {
@@ -17,7 +17,7 @@ const isLoggedIn: RequestMethod = async (req, res, next) => {
   const { token } = req.cookies;
 
   if (!token) {
-    return next(new AppError("Unauthorized access, please login", 400));
+    return next(new AppError('Unauthorized access, please login', 400));
   }
 
   // verify the user and their details
@@ -29,6 +29,4 @@ const isLoggedIn: RequestMethod = async (req, res, next) => {
   next();
 };
 
-export {
-  isLoggedIn
-}
+export { isLoggedIn };
