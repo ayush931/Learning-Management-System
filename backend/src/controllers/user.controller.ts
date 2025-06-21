@@ -337,7 +337,8 @@ const update: RequestMethod = async (req, res, next) => {
     if (!user) {
       return next(new AppError('User does not exists', 400));
     }
-
+    
+    // taking and updating the name
     if (name) {
       user.name = name;
     }

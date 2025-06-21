@@ -5,6 +5,7 @@ import { config } from 'dotenv';
 import morgan from 'morgan';
 import userRouter from './routes/user.route';
 import errorMiddleware from './middlewares/error.middleware';
+import courseRouter from './routes/course.route';
 config();
 
 const app = express();
@@ -31,6 +32,7 @@ app.use(
 
 // all the routers
 app.use('/api/v1/user', userRouter);
+app.use('/api/v1/course', courseRouter);
 
 //@ts-ignore
 app.use(errorMiddleware);

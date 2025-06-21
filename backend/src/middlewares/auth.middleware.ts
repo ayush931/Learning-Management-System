@@ -29,4 +29,15 @@ const isLoggedIn: RequestMethod = async (req, res, next) => {
   next();
 };
 
-export { isLoggedIn };
+const authorizedRole = (...roles: any[]) => async (req: Request, res: Response, next: NextFunction) => {
+  // getting the role of the user from the jwt token
+  const currentUserRoles = req.user.role;
+
+  if (!roles.includes(currentUserRoles)) {
+    return next(new AppError('You dont have the permission to access the route', 400));
+  }
+
+  next();
+}
+
+export { isLoggedIn, authorizedRole };
