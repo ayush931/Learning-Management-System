@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import userRouter from './routes/user.route';
 import errorMiddleware from './middlewares/error.middleware';
 import courseRouter from './routes/course.route';
+import paymentRouter from './routes/payment.route';
 config();
 
 const app = express();
@@ -33,8 +34,10 @@ app.use(
 // all the routers
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/course', courseRouter);
+app.use('/api/v1/payment', paymentRouter);
 
 //@ts-ignore
+// cheking the error middleware and stoping the execution when the js thread reaches here
 app.use(errorMiddleware);
 
 export default app;

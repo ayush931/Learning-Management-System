@@ -23,12 +23,14 @@ const getAllCourses: RequestMethod = async (req, res, next) => {
 
 const getLecturesByCourseId: RequestMethod = async (req, res, next) => {
   try {
+    // getting the user id through params
     const { id } = req.params;
 
     if (!id) {
       return next(new AppError('Provide course id', 400));
     }
 
+    // finding course through the the id
     const course = await Course.findById(id);
 
     if (!course) {
@@ -47,12 +49,14 @@ const getLecturesByCourseId: RequestMethod = async (req, res, next) => {
 
 const getCourseByCourseId: RequestMethod = async (req, res, next) => {
   try {
+    // getting the id through params
     const { id } = req.params;
 
     if (!id) {
       return next(new AppError('Provide course id', 400));
     }
 
+    // finding the course through the id
     const course = await Course.findById(id);
 
     if (!course) {
@@ -71,12 +75,14 @@ const getCourseByCourseId: RequestMethod = async (req, res, next) => {
 
 const createCourse: RequestMethod = async (req, res, next) => {
   try {
+    // getting the details through body
     const { title, description, category, createdBy } = req.body;
 
     if (!title || !description || !category || !createdBy) {
       return next(new AppError('Provide all the details', 400));
     }
 
+    // creating the new course into the database
     const course = await Course.create({
       title,
       description,
@@ -92,6 +98,7 @@ const createCourse: RequestMethod = async (req, res, next) => {
       return next(new AppError('Course could not created, please try again', 400));
     }
 
+    // uploading the photo into the cloudinary
     try {
       if (req.file) {
         const result = await cloudinary.v2.uploader.upload(req.file.path, {
@@ -104,7 +111,7 @@ const createCourse: RequestMethod = async (req, res, next) => {
             course.thumbnail.secure_url = result.secure_url;
           }
         }
-
+        // deleting the file from local folder after the uploading in cloudinary
         fs.rm(`uploads/${req.file.filename}`);
       }
     } catch (error) {
@@ -125,12 +132,14 @@ const createCourse: RequestMethod = async (req, res, next) => {
 
 const updateCourse: RequestMethod = async (req, res, next) => {
   try {
+    // getting the course id through params
     const { id } = req.params;
 
     if (!id) {
       return next(new AppError('Provide the user id', 400));
     }
 
+    // finding the course through id and updating it
     const course = await Course.findByIdAndUpdate(
       id,
       {
@@ -157,18 +166,21 @@ const updateCourse: RequestMethod = async (req, res, next) => {
 
 const removeCourse: RequestMethod = async (req, res, next) => {
   try {
+    // getting the course id through params
     const { id } = req.params;
 
     if (!id) {
       return next(new AppError('Provide the course id', 400));
     }
 
+    // finding the course with id
     const course = await Course.findById(id);
 
     if (!course) {
       return next(new AppError('Course with given id is not available', 400));
     }
 
+    // deleting the course of given id
     await Course.deleteOne();
 
     return res.status(200).json({
@@ -182,6 +194,7 @@ const removeCourse: RequestMethod = async (req, res, next) => {
 
 const addLectureToCourseId: RequestMethod = async (req, res, next) => {
   try {
+    // getting the details through request
     const { title, description } = req.body;
     const { id } = req.params;
 
@@ -193,12 +206,14 @@ const addLectureToCourseId: RequestMethod = async (req, res, next) => {
       return next(new AppError('Provide the course id', 400));
     }
 
+    // finding the course through the id
     const course = await Course.findById(id);
 
     if (!course) {
       return next(new AppError('Course with the given id does not exists', 400));
     }
 
+    // updating the data in this variable
     const lectureData = {
       title,
       description,
@@ -208,6 +223,7 @@ const addLectureToCourseId: RequestMethod = async (req, res, next) => {
       },
     };
 
+    // uploading the file in the cloudinary
     try {
       if (req.file) {
         const result = await cloudinary.v2.uploader.upload(req.file.path, {
@@ -219,14 +235,17 @@ const addLectureToCourseId: RequestMethod = async (req, res, next) => {
           lectureData.lecture.secure_url = result.secure_url;
         }
 
+        // deleting the photo from the local system after uploading
         fs.rm(`uploads/${req.file.filename}`);
       }
     } catch (error) {
       return next(new AppError(String(error), 500));
     }
 
+    // push the data from the above variable to the course module
     course.lectures.push(lectureData);
 
+    // giving the total number of the lectures created
     course.numberOfLectures = course.lectures.length;
 
     await course.save();

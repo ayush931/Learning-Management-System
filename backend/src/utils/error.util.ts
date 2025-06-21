@@ -1,3 +1,4 @@
+// making the global error handling class
 class AppError extends Error {
   statusCode: Number;
   constructor(message: string, statusCode: Number) {

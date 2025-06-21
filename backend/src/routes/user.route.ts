@@ -16,7 +16,7 @@ const userRouter = Router();
 // using the multer middleware
 userRouter.post('/register', upload.single('avatar'), register);
 userRouter.post('/login', login);
-userRouter.get('/logout', logout);
+userRouter.get('/logout', isLoggedIn, logout);
 // checking if the user is loggedin or not, using isLoggedIn middleware
 userRouter.get('/me', isLoggedIn, getProfile);
 userRouter.post('/forgotPassword', forgotPassword);

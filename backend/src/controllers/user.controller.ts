@@ -87,7 +87,7 @@ const register: RequestMethod = async (req, res, next) => {
     user.password = '';
 
     // final response
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: 'User registered successfully',
       user,
@@ -130,7 +130,7 @@ const login: RequestMethod = async (req, res, next) => {
     // removing the value of password before returning it
     user.password = '';
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: 'Logged in successfully',
       user,
@@ -149,7 +149,7 @@ const logout: RequestMethod = async (req, res, next) => {
       httpOnly: true,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: 'Logout successfully',
     });
@@ -174,7 +174,7 @@ const getProfile: RequestMethod = async (req, res, next) => {
       return next(new AppError('User does not exists', 400));
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: 'User details',
       user,
@@ -226,7 +226,10 @@ const forgotPassword: RequestMethod = async (req, res, next) => {
 
       await user.save();
 
-      return next(new AppError(String(error), 500));
+      return res.status(200).json({
+        success: true,
+        message: 'Password reset successfully'
+      })
     }
   } catch (error) {
     return next(new AppError(String(error), 500));
@@ -337,7 +340,7 @@ const update: RequestMethod = async (req, res, next) => {
     if (!user) {
       return next(new AppError('User does not exists', 400));
     }
-    
+
     // taking and updating the name
     if (name) {
       user.name = name;
