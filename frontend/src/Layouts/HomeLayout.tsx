@@ -32,10 +32,10 @@ function HomeLayout({ children }: { children: ReactNode }) {
     (drawerSide[0] as HTMLElement).style.width = "0px";
   }
 
-  async function handleLogout(e) {
-    e.preventDefault()
+  async function handleLogout(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
     // const res = await dispatch(logout());
-    navigate("/")
+    navigate("/");
   }
 
   return (
@@ -76,7 +76,7 @@ function HomeLayout({ children }: { children: ReactNode }) {
             </li>
             {!isLoggedIn && (
               <li className="absolute bottom-4 w-[90%]">
-                <div className="w-full flex items-center justify-center">
+                <div className="w-full flex items-center gap-3 justify-center">
                   <button className="btn-primary px-4 py-1 font-semibold rounded-md w-full">
                     <Link to={"/login"}>Login</Link>
                   </button>
@@ -92,8 +92,11 @@ function HomeLayout({ children }: { children: ReactNode }) {
                   <button className="btn-primary px-4 py-1 font-semibold rounded-md w-full">
                     <Link to={"/user/profile"}>Profile</Link>
                   </button>
-                  <button className="btn-secondary px-4 py-1 font-semibold rounded-md w-full">
-                    <Link onClick={handleLogout}>Logout</Link>
+                  <button
+                    className="btn-secondary px-4 py-1 font-semibold rounded-md w-full"
+                    onClick={handleLogout}
+                  >
+                    Logout
                   </button>
                 </div>
               </li>

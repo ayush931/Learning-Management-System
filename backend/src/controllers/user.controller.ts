@@ -66,7 +66,11 @@ const register: RequestMethod = async (req, res, next) => {
           fs.rm(`uploads/${req.file.filename}`);
         }
       } catch (error) {
-        return next(new AppError(String(error), 400));
+        console.error('Cloudinary upload error:', error); // Log the actual error
+        const errorMessage = error instanceof Error
+          ? error.message
+          : JSON.stringify(error); // Convert object to string if not Error instance
+        return next(new AppError(`Failed to upload image: ${errorMessage}`, 400));
       }
     }
     // generating the token
@@ -93,7 +97,8 @@ const register: RequestMethod = async (req, res, next) => {
       user,
     });
   } catch (error) {
-    return next(new AppError(String(error), 500));
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+    return next(new AppError(errorMessage, 500));
   }
 };
 
