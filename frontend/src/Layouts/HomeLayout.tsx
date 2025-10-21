@@ -7,6 +7,7 @@ import type { ReactNode } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import type { RootState } from "../Redux/store";
+import { logoutAccount } from "../Redux/Slice/AuthSlice";
 
 function HomeLayout({ children }: { children: ReactNode }) {
 
@@ -34,8 +35,11 @@ function HomeLayout({ children }: { children: ReactNode }) {
 
   async function handleLogout(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
-    // const res = await dispatch(logout());
-    navigate("/");
+    const res = await dispatch(logoutAccount());
+
+    if (res?.payload?.success) {
+      navigate('/');
+    }
   }
 
   return (
@@ -77,10 +81,10 @@ function HomeLayout({ children }: { children: ReactNode }) {
             {!isLoggedIn && (
               <li className="absolute bottom-4 w-[90%]">
                 <div className="w-full flex items-center gap-3 justify-center">
-                  <button className="btn-primary px-4 py-1 font-semibold rounded-md w-full">
+                  <button className="bg-pink-500 px-4 py-1 font-semibold rounded-md w-full">
                     <Link to={"/login"}>Login</Link>
                   </button>
-                  <button className="btn-secondary px-4 py-1 font-semibold rounded-md w-full">
+                  <button className="bg-blue-500 px-4 py-1 font-semibold rounded-md w-full">
                     <Link to={"/signup"}>Signup</Link>
                   </button>
                 </div>
@@ -89,11 +93,11 @@ function HomeLayout({ children }: { children: ReactNode }) {
             {isLoggedIn && (
               <li className="absolute bottom-4 w-[90%]">
                 <div className="w-full flex items-center justify-center">
-                  <button className="btn-primary px-4 py-1 font-semibold rounded-md w-full">
+                  <button className="bg-pink-500 px-4 py-1 font-semibold rounded-md w-full">
                     <Link to={"/user/profile"}>Profile</Link>
                   </button>
                   <button
-                    className="btn-secondary px-4 py-1 font-semibold rounded-md w-full"
+                    className="bg-blue-500 px-4 py-1 font-semibold rounded-md w-full"
                     onClick={handleLogout}
                   >
                     Logout
