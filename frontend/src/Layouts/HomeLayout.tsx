@@ -2,7 +2,6 @@ import { FiMenu } from "react-icons/fi";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "../Components/Footer";
-
 import type { ReactNode } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";

@@ -21,7 +21,7 @@ export const createAccount = createAsyncThunk("/auth/signup", async (data) => {
 
     return (await res).data
   } catch (error) {
-    toast.error(String(error))
+    toast.error(String(error?.response?.data?.message))
   }
 })
 
@@ -38,7 +38,7 @@ export const loginAccount = createAsyncThunk("/auth/login", async (data) => {
 
     return (await res).data
   } catch (error) {
-    toast.error(String(error))
+    toast.error(String(error?.response?.data?.message))
   }
 })
 
@@ -55,7 +55,7 @@ export const logoutAccount = createAsyncThunk("/auth/logout", async () => {
 
     return (await res).data
   } catch (error) {
-    toast.error(String(error))
+    toast.error(String(error?.response?.data?.message))
   }
 })
 
